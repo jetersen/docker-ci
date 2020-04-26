@@ -49,11 +49,11 @@ Describe 'Parse context from git repository' {
                 $invocationResult.Output = "https://github.com/3shapeAS/DOCKERBUILD-pwsh.git"
                 $invocationResult
             }
-            Mock -CommandName "Invoke-Command" $mockCode -Verifiable -ModuleName $Global:ModuleName
+            Mock -CommandName "Invoke-CommandEx" $mockCode -Verifiable -ModuleName $Global:ModuleName
 
             $result = Find-ImageName -RepositoryPath $gitReposWithUppercase
 
-            Assert-MockCalled -CommandName "Invoke-Command" -ModuleName $Global:ModuleName -Exactly 1
+            Assert-MockCalled -CommandName "Invoke-CommandEx" -ModuleName $Global:ModuleName -Exactly 1
             $result.ImageName | Should -BeExactly 'dockerbuild-pwsh'
         }
     }

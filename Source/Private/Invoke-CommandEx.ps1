@@ -1,6 +1,6 @@
 # Copied from here: https://github.com/dotnet/roslyn/blob/master/src/Setup/Installer/tools/utils.ps1
 . "$PSScriptRoot\Write-PassThruOutput.ps1"
-function Invoke-Command {
+function Invoke-CommandExEx {
     [CmdletBinding(PositionalBinding = $false)]
     param (
         [Parameter(mandatory = $true, Position = 0)]
@@ -37,16 +37,16 @@ function Invoke-Command {
             }'
         $eventHandlerSource = $eventHandlerSource.Replace("WriteLogging", !$Quiet.IsPresent)
 
-        $stdOutHandlerSource = [ScriptBlock]::Create($eventHandlerSource)
-        $stdErrHandlerSource = [ScriptBlock]::Create($eventHandlerSource)
+        # $stdOutHandlerSource = [ScriptBlock]::Create($eventHandlerSource)
+        # $stdErrHandlerSource = [ScriptBlock]::Create($eventHandlerSource)
 
-        $stdOutEventHandler = Register-ObjectEvent -InputObject $process `
-            -Action $stdOutHandlerSource -EventName 'OutputDataReceived' `
-            -MessageData $stdOutMessages
+        # $stdOutEventHandler = Register-ObjectEvent -InputObject $process `
+        #     -Action $stdOutHandlerSource -EventName 'OutputDataReceived' `
+        #     -MessageData $stdOutMessages
 
-        $stdErrEventHandler = Register-ObjectEvent -InputObject $process `
-            -Action $stdErrHandlerSource -EventName 'ErrorDataReceived' `
-            -MessageData $stdErrMessages
+        # $stdErrEventHandler = Register-ObjectEvent -InputObject $process `
+        #     -Action $stdErrHandlerSource -EventName 'ErrorDataReceived' `
+        #     -MessageData $stdErrMessages
 
         $process.Start() | Out-Null
 
@@ -77,18 +77,20 @@ function Invoke-Command {
 
         $finished = $true
     } finally {
-        Unregister-Event -SourceIdentifier $stdOutEventHandler.Name
-        Unregister-Event -SourceIdentifier $stdErrEventHandler.Name
+        # Unregister-Event -SourceIdentifier $stdOutEventHandler.Name
+        # Unregister-Event -SourceIdentifier $stdErrEventHandler.Name
         # If we didn't finish then an error occurred or the user hit ctrl-c. Either
         # way kill the process
         try {
-            if (-not $finished -or -not $process.HasExited) {
-                $message = "Cleanup, kill the process with id $processId"
-                Write-Debug $message
-                if (!$Quiet) {
-                    Write-CommandOuput $message
+            if (-not $finished -and -not $process.HasExited) {
+                if (-Not $processId -and -Not $processId -eq 0) {
+                    $message = "Cleanup, kill the process with id $processId"
+                    Write-Debug $message
+                    if (!$Quiet) {
+                        Write-CommandOuput $message
+                    }
+                    $process.Kill()
                 }
-                $process.Kill()
             }
         } catch {
             # This can happen if the process was never started in which case WaitForExit or HasExited throws an exception.

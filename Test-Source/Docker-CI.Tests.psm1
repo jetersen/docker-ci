@@ -54,7 +54,7 @@ Set-GlobalVar -Variable CodeThatReturnsExitCodeOne -Value {
     return $result
 }
 
-. "$PSScriptRoot\..\Source\Private\Invoke-Command.ps1"
+. "$PSScriptRoot\..\Source\Private\Invoke-CommandEx.ps1"
 . "$PSScriptRoot\..\Source\Private\Invoke-DockerCommand.ps1"
 . "$PSScriptRoot\..\Source\Private\Assert-ExitCodeOk.ps1"
 . "$PSScriptRoot\..\Source\Private\Find-DockerOSType.ps1"

@@ -22,7 +22,7 @@ function Invoke-DockerLogin {
     $args = "login --username `"${Username}`" --password-stdin ${Registry}".TrimEnd()
     $maskedCommand = $args.Replace($plaintextPassword, "*********")
 
-    [CommandResult] $commandResult = Invoke-Command 'docker' -CommandArgs $args -InputLines $plaintextPassword
+    [CommandResult] $commandResult = Invoke-CommandEx 'docker' -CommandArgs $args -InputLines $plaintextPassword
 
     if (!$Quiet) {
         Write-CommandOuput $($commandResult.Output)

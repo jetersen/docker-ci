@@ -28,7 +28,7 @@ Describe 'Runs only external tools' {
             if ($IsLinux) {
                 Set-ItResult -Skipped -Because 'There is a bug in the Linux implementation of Process.WaitForExit() that seems to not wait for all async event handlers. This results in this test sometimes failing with a empty result from stdout or stderr.'
             }
-            $result = Invoke-Command -Command $command.Command -CommandArgs $command.CommandArgs -Quiet:$true 6> $tempFile
+            $result = Invoke-CommandEx -Command $command.Command -CommandArgs $command.CommandArgs -Quiet:$true 6> $tempFile
 
             $result.ExitCode | Should -Be 0
             $result.StdOut | Should -Not -BeNullOrEmpty
@@ -41,7 +41,7 @@ Describe 'Runs only external tools' {
             if ($IsLinux) {
                 Set-ItResult -Skipped -Because 'There is a bug in the Linux implementation of Process.WaitForExit() that seems to not wait for all async event handlers. This results in this test sometimes failing with a empty result from stdout or stderr.'
             }
-            $result = Invoke-Command -Command $command.Command -Quiet:$true
+            $result = Invoke-CommandEx -Command $command.Command -Quiet:$true
 
             $result.ExitCode | Should -Not -Be 0
             $result.StdOut | Should -BeNullOrEmpty
@@ -53,7 +53,7 @@ Describe 'Runs only external tools' {
             if ($IsLinux) {
                 Set-ItResult -Skipped -Because 'There is a bug in the Linux implementation of Process.WaitForExit() that seems to not wait for all async event handlers. This results in this test sometimes failing with a empty result from stdout or stderr.'
             }
-            $result = Invoke-Command -Command $command.Command -CommandArgs $command.CommandArgs -Quiet:$false 6> $tempFile
+            $result = Invoke-CommandEx -Command $command.Command -CommandArgs $command.CommandArgs -Quiet:$false 6> $tempFile
 
             $result.ExitCode | Should -Be 0
             $result.StdOut | Should -Not -BeNullOrEmpty
@@ -66,7 +66,7 @@ Describe 'Runs only external tools' {
             if ($IsLinux) {
                 Set-ItResult -Skipped -Because 'There is a bug in the Linux implementation of Process.WaitForExit() that seems to not wait for all async event handlers. This results in this test sometimes failing with a empty result from stdout or stderr.'
             }
-            $result = Invoke-Command -Command $command.Command -CommandArgs "---nope-this-is-clearly-wrong" -Quiet:$true 6> $tempFile
+            $result = Invoke-CommandEx -Command $command.Command -CommandArgs "---nope-this-is-clearly-wrong" -Quiet:$true 6> $tempFile
 
             $result.ExitCode | Should -Not -Be 0
             $result.StdOut | Should -BeNullOrEmpty
@@ -79,7 +79,7 @@ Describe 'Runs only external tools' {
             if ($IsLinux) {
                 Set-ItResult -Skipped -Because 'There is a bug in the Linux implementation of Process.WaitForExit() that seems to not wait for all async event handlers. This results in this test sometimes failing with a empty result from stdout or stderr.'
             }
-            $result = Invoke-Command -Command $command.Command -CommandArgs "---nope-this-is-clearly-wrong" -Quiet:$false 6> $tempFile
+            $result = Invoke-CommandEx -Command $command.Command -CommandArgs "---nope-this-is-clearly-wrong" -Quiet:$false 6> $tempFile
 
             $result.ExitCode | Should -Not -Be 0
             $result.StdOut | Should -BeNullOrEmpty
@@ -92,7 +92,7 @@ Describe 'Runs only external tools' {
             if ($IsLinux) {
                 Set-ItResult -Skipped -Because 'There is a bug in the Linux implementation of Process.WaitForExit() that seems to not wait for all async event handlers. This results in this test sometimes failing with a empty result from stdout or stderr.'
             }
-            $result = Invoke-Command $command.Command `
+            $result = Invoke-CommandEx $command.Command `
                 -CommandArgs $command.CommandArgs `
                 -InputLines @('anytext') `
                 -Quiet:$true 6> $tempFile
@@ -107,7 +107,7 @@ Describe 'Runs only external tools' {
     Context 'Runs a non-existent command, throws an exception' {
 
         It 'throws MethodInvocationException instead of CommandNotFoundException' {
-            $theCode = { Invoke-Command -Command 'GibberishGoo' }
+            $theCode = { Invoke-CommandEx -Command 'GibberishGoo' }
             $theCode | Should -Throw -ExceptionType ([System.Management.Automation.MethodInvocationException]) -PassThru
         }
     }
@@ -115,7 +115,7 @@ Describe 'Runs only external tools' {
     Context 'Runs a PS CmdLet, throws an exception just like running a non-existent command' {
 
         It 'throws MethodInvocationException instead of CommandNotFoundException' {
-            $theCode = { Invoke-Command -Command 'Get-Verb' }
+            $theCode = { Invoke-CommandEx -Command 'Get-Verb' }
             $theCode | Should -Throw -ExceptionType ([System.Management.Automation.MethodInvocationException]) -PassThru
         }
     }
@@ -123,12 +123,12 @@ Describe 'Runs only external tools' {
     Context 'Runs a null or empty command' {
 
         It 'throws ParameterBindingException if a null command is passed' {
-            $theCode = { Invoke-Command $null }
+            $theCode = { Invoke-CommandEx $null }
             $theCode | Should -Throw -ExceptionType ([System.Management.Automation.ParameterBindingException]) -PassThru
         }
 
         It 'throws ParameterBindingException if an empty command is passed' {
-            $theCode = { Invoke-Command -Command "" }
+            $theCode = { Invoke-CommandEx -Command "" }
             $theCode | Should -Throw -ExceptionType ([System.Management.Automation.ParameterBindingException]) -PassThru
         }
     }

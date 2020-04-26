@@ -7,7 +7,7 @@ if ($IsWindows -and $env:TF_BUILD -ieq 'true') {
 Import-Module -Force (Get-ChildItem -Path $PSScriptRoot/../Source -Recurse -Include *.psm1 -File).FullName
 Import-Module -Global -Force $PSScriptRoot/Docker-CI.Tests.psm1
 
-. "$PSScriptRoot\..\Source\Private\Invoke-Command.ps1"
+. "$PSScriptRoot\..\Source\Private\Invoke-CommandEx.ps1"
 . "$PSScriptRoot\..\Source\Private\Utilities.ps1"
 
 Describe 'Use cases for this module' {

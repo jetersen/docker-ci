@@ -5,11 +5,11 @@ Describe 'Pull docker images' {
 
     BeforeEach {
         Initialize-MockReg
-        Mock -CommandName "Invoke-Command" $Global:CodeThatReturnsExitCodeZero -Verifiable -ModuleName $Global:moduleName
+        Mock -CommandName "Invoke-CommandEx" $Global:CodeThatReturnsExitCodeZero -Verifiable -ModuleName $Global:moduleName
     }
 
     AfterEach {
-        Assert-MockCalled -CommandName "Invoke-Command" -ModuleName $Global:moduleName
+        Assert-MockCalled -CommandName "Invoke-CommandEx" -ModuleName $Global:moduleName
     }
 
     Context 'Docker pulls docker images' {
@@ -89,7 +89,7 @@ Describe 'Pull docker images' {
         }
 
         It 'cannot pull the requested docker image, throws exception on non-zero exit code' {
-            Mock -CommandName "Invoke-Command" $Global:CodeThatReturnsExitCodeOne  -Verifiable -ModuleName $Global:ModuleName
+            Mock -CommandName "Invoke-CommandEx" $Global:CodeThatReturnsExitCodeOne  -Verifiable -ModuleName $Global:ModuleName
             $theCode = { Invoke-DockerPull -ImageName 'mcr.microsoft.com/ubuntu' }
             $theCode | Should -Throw -ExceptionType ([System.Exception]) -PassThru
         }
@@ -99,11 +99,11 @@ Describe 'Pull docker images' {
 
         BeforeEach {
             Initialize-MockReg
-            Mock -CommandName "Invoke-Command" $Global:CodeThatReturnsExitCodeZero -Verifiable -ModuleName $Global:ModuleName
+            Mock -CommandName "Invoke-CommandEx" $Global:CodeThatReturnsExitCodeZero -Verifiable -ModuleName $Global:ModuleName
         }
 
         AfterEach {
-            Assert-MockCalled -CommandName "Invoke-Command" -ModuleName $Global:ModuleName
+            Assert-MockCalled -CommandName "Invoke-CommandEx" -ModuleName $Global:ModuleName
         }
         BeforeAll {
             $pipedInput = {
@@ -134,7 +134,7 @@ Describe 'Pull docker images' {
 
         It 'outputs results if Quiet is disabled' {
             $tempFile = New-TemporaryFile
-            Mock -CommandName "Invoke-Command" $Global:CodeThatReturnsExitCodeZero -Verifiable -ModuleName $Global:ModuleName
+            Mock -CommandName "Invoke-CommandEx" $Global:CodeThatReturnsExitCodeZero -Verifiable -ModuleName $Global:ModuleName
 
             Invoke-DockerPull -ImageName 'ubuntu' -Quiet:$false 6> $tempFile
 
@@ -144,7 +144,7 @@ Describe 'Pull docker images' {
 
         It 'suppresses results if Quiet is enabled' {
             $tempFile = New-TemporaryFile
-            Mock -CommandName "Invoke-Command" $Global:CodeThatReturnsExitCodeZero -Verifiable -ModuleName $Global:ModuleName
+            Mock -CommandName "Invoke-CommandEx" $Global:CodeThatReturnsExitCodeZero -Verifiable -ModuleName $Global:ModuleName
 
             Invoke-DockerPull -ImageName 'ubuntu' -Quiet:$true 6> $tempFile
 

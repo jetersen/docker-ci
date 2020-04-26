@@ -11,5 +11,5 @@ function Invoke-DockerCommand {
         [Switch]
         $Quiet = [System.Convert]::ToBoolean($env:DOCKER_CI_QUIET_MODE)
     )
-    return Invoke-Command -Command 'docker' -CommandArgs $CommandArgs -Quiet:$Quiet -InputLines $InputLines
+    return Invoke-CommandEx -Command 'docker' -CommandArgs $CommandArgs -Quiet:$Quiet -InputLines $InputLines
 }

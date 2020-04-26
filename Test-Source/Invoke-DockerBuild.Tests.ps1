@@ -6,11 +6,11 @@ Describe 'Build docker images' {
     BeforeEach {
         Initialize-MockReg
         $dockerFile = Join-Path $Global:DockerImagesDir "Linux.Dockerfile"
-        Mock -CommandName "Invoke-Command" $Global:CodeThatReturnsExitCodeZero -Verifiable -ModuleName $Global:ModuleName
+        Mock -CommandName "Invoke-CommandEx" $Global:CodeThatReturnsExitCodeZero -Verifiable -ModuleName $Global:ModuleName
     }
 
     AfterEach {
-        Assert-MockCalled -CommandName "Invoke-Command" -ModuleName $Global:ModuleName
+        Assert-MockCalled -CommandName "Invoke-CommandEx" -ModuleName $Global:ModuleName
     }
 
     Context 'Docker build with latest tag' {
@@ -24,7 +24,7 @@ Describe 'Build docker images' {
         }
 
         It 'Throws exception if exitcode is not 0' {
-            Mock -CommandName "Invoke-Command" $Global:CodeThatReturnsExitCodeOne -Verifiable -ModuleName $Global:ModuleName
+            Mock -CommandName "Invoke-CommandEx" $Global:CodeThatReturnsExitCodeOne -Verifiable -ModuleName $Global:ModuleName
             $runner = { Invoke-DockerBuild -ImageName "leeandrasmus" -Context $Global:DockerImagesDir -Dockerfile $dockerFile }
             $runner | Should -Throw -ExceptionType ([System.Exception]) -PassThru
         }

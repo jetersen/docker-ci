@@ -12,7 +12,7 @@ Describe 'Login failure' {
                 StoreMockValue -Key "maskedCommand" -Value $Result.Command
                 throw [System.Exception]::new()
             }
-            Mock -CommandName "Invoke-Command" $Global:CodeThatReturnsExitCodeOne -Verifiable -ModuleName $Global:ModuleName
+            Mock -CommandName "Invoke-CommandEx" $Global:CodeThatReturnsExitCodeOne -Verifiable -ModuleName $Global:ModuleName
             Mock -CommandName "Assert-ExitCodeOK" $assertExitCodeOkMocked -Verifiable -ModuleName $Global:ModuleName
         }
 
@@ -33,7 +33,7 @@ Describe 'Docker login ' {
 
     BeforeEach {
         Initialize-MockReg
-        Mock -CommandName "Invoke-Command" $Global:CodeThatReturnsExitCodeZero -Verifiable -ModuleName $Global:ModuleName
+        Mock -CommandName "Invoke-CommandEx" $Global:CodeThatReturnsExitCodeZero -Verifiable -ModuleName $Global:ModuleName
     }
 
     Context 'Login to default docker registry' {
@@ -64,7 +64,7 @@ Describe 'Docker login ' {
 
         It 'outputs the result if Quiet is disabled' {
             $tempFile = New-TemporaryFile
-            Mock -CommandName "Invoke-Command" $Global:CodeThatReturnsExitCodeZero -Verifiable -ModuleName $Global:ModuleName
+            Mock -CommandName "Invoke-CommandEx" $Global:CodeThatReturnsExitCodeZero -Verifiable -ModuleName $Global:ModuleName
 
             Invoke-DockerLogin -Quiet:$false -Username "Mocked" -Password (ConvertTo-SecureString 'MockedPassword' –asplaintext –force) 6> $tempFile
             $result = Get-Content $tempFile
@@ -74,7 +74,7 @@ Describe 'Docker login ' {
 
         It 'suppresses the result if Quiet is enabled' {
             $tempFile = New-TemporaryFile
-            Mock -CommandName "Invoke-Command" $Global:CodeThatReturnsExitCodeZero -Verifiable -ModuleName $Global:ModuleName
+            Mock -CommandName "Invoke-CommandEx" $Global:CodeThatReturnsExitCodeZero -Verifiable -ModuleName $Global:ModuleName
 
             Invoke-DockerLogin -Quiet:$true -Username "Mocked" -Password (ConvertTo-SecureString 'MockedPassword' –asplaintext –force) 6> $tempFile
             $result = Get-Content $tempFile

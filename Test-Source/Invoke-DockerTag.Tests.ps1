@@ -5,11 +5,11 @@ Describe 'Tag docker images' {
 
     BeforeEach {
         Initialize-MockReg
-        Mock -CommandName "Invoke-Command" $Global:CodeThatReturnsExitCodeZero -Verifiable -ModuleName $Global:ModuleName
+        Mock -CommandName "Invoke-CommandEx" $Global:CodeThatReturnsExitCodeZero -Verifiable -ModuleName $Global:ModuleName
     }
 
     AfterEach {
-        Assert-MockCalled -CommandName "Invoke-Command" -ModuleName $Global:ModuleName
+        Assert-MockCalled -CommandName "Invoke-CommandEx" -ModuleName $Global:ModuleName
     }
 
     Context 'Docker tags public registry images' {
@@ -141,7 +141,7 @@ Describe 'Tag docker images' {
     Context 'tags invalid image' {
 
         It 'tags invalid image with invalid registry' {
-            Mock -CommandName "Invoke-Command" $Global:CodeThatReturnsExitCodeOne -Verifiable -ModuleName $Global:ModuleName
+            Mock -CommandName "Invoke-CommandEx" $Global:CodeThatReturnsExitCodeOne -Verifiable -ModuleName $Global:ModuleName
             $runner = { Invoke-DockerTag -ImageName 'oldname' -NewRegistry '.' -NewImageName 'newimage' -NewTag 'newtag' }
             $runner | Should -Throw -ExceptionType ([System.Exception]) -PassThru
         }
@@ -177,7 +177,7 @@ Describe 'Tag docker images' {
     Context 'Verbosity of execution' {
 
         It 'outputs result if Quiet is disabled' {
-            Mock -CommandName "Invoke-Command" $Global:CodeThatReturnsExitCodeZero -Verifiable -ModuleName $Global:ModuleName
+            Mock -CommandName "Invoke-CommandEx" $Global:CodeThatReturnsExitCodeZero -Verifiable -ModuleName $Global:ModuleName
             $tempFile = New-TemporaryFile
 
             Invoke-DockerTag -Quiet:$false -Registry 'artifactoryfqdn' -ImageName 'oldname' -NewImageName 'newimage' 6> $tempFile
@@ -187,7 +187,7 @@ Describe 'Tag docker images' {
         }
 
         It 'suppresses output if Quiet is enabled' {
-            Mock -CommandName "Invoke-Command" $Global:CodeThatReturnsExitCodeZero -Verifiable -ModuleName $Global:ModuleName
+            Mock -CommandName "Invoke-CommandEx" $Global:CodeThatReturnsExitCodeZero -Verifiable -ModuleName $Global:ModuleName
             $tempFile = New-TemporaryFile
 
             Invoke-DockerTag -Quiet:$enable -Registry 'artifactoryfqdn' -ImageName 'oldname' -NewImageName 'newimage' 6> $tempFile

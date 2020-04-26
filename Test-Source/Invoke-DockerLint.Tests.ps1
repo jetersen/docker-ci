@@ -92,7 +92,7 @@ Describe 'Execute linting on a given docker image' {
         }
 
         It 'outputs the result if Quiet is disabled' {
-            Mock -CommandName "Invoke-Command" $Global:CodeThatReturnsExitCodeZero -Verifiable -ModuleName $Global:ModuleName
+            Mock -CommandName "Invoke-CommandEx" $Global:CodeThatReturnsExitCodeZero -Verifiable -ModuleName $Global:ModuleName
             $tempFile = New-TemporaryFile
             $dockerFile = Join-Path $Global:DockerImagesDir 'Linux.Dockerfile'
 
@@ -104,7 +104,7 @@ Describe 'Execute linting on a given docker image' {
         }
 
         It 'suppresses the output of the command invoked if Quiet is enabled' {
-            Mock -CommandName "Invoke-Command" $Global:CodeThatReturnsExitCodeZero -Verifiable -ModuleName $Global:ModuleName
+            Mock -CommandName "Invoke-CommandEx" $Global:CodeThatReturnsExitCodeZero -Verifiable -ModuleName $Global:ModuleName
             $tempFile = New-TemporaryFile
             $dockerFile = Join-Path $Global:DockerImagesDir 'Linux.Dockerfile'
 

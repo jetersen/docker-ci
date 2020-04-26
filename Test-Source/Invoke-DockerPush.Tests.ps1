@@ -7,11 +7,11 @@ Describe 'docker push' {
 
         BeforeEach {
             Initialize-MockReg
-            Mock -CommandName 'Invoke-Command' $Global:CodeThatReturnsExitCodeZero -Verifiable -ModuleName $Global:ModuleName
+            Mock -CommandName 'Invoke-CommandEx' $Global:CodeThatReturnsExitCodeZero -Verifiable -ModuleName $Global:ModuleName
         }
 
         AfterEach {
-            Assert-MockCalled -CommandName 'Invoke-Command' -ModuleName $Global:ModuleName
+            Assert-MockCalled -CommandName 'Invoke-CommandEx' -ModuleName $Global:ModuleName
         }
 
         It 'produces the correct command to invoke with only image name provided' {
@@ -46,7 +46,7 @@ Describe 'docker push' {
         }
 
         It 'throws an exception if the execution of docker push did not succeed' {
-            Mock -CommandName 'Invoke-Command' $Global:CodeThatReturnsExitCodeOne -Verifiable -ModuleName $Global:ModuleName
+            Mock -CommandName 'Invoke-CommandEx' $Global:CodeThatReturnsExitCodeOne -Verifiable -ModuleName $Global:ModuleName
 
             $theCode = {
                 Invoke-DockerPush -ImageName 'cool-image' -Registry 'hub.docker.com:1337/thebestdockerimages' -Tag 'v1.0.3'
@@ -68,11 +68,11 @@ Describe 'docker push' {
 
         BeforeEach {
             Initialize-MockReg
-            Mock -CommandName 'Invoke-Command' $Global:CodeThatReturnsExitCodeZero -Verifiable -ModuleName $Global:ModuleName
+            Mock -CommandName 'Invoke-CommandEx' $Global:CodeThatReturnsExitCodeZero -Verifiable -ModuleName $Global:ModuleName
         }
 
         AfterEach {
-            Assert-MockCalled -CommandName 'Invoke-Command' -ModuleName $Global:ModuleName
+            Assert-MockCalled -CommandName 'Invoke-CommandEx' -ModuleName $Global:ModuleName
         }
 
         It 'can consume arguments from pipeline' {
@@ -92,12 +92,12 @@ Describe 'docker push' {
 
         BeforeEach {
             Initialize-MockReg
-            Mock -CommandName 'Invoke-Command' $Global:CodeThatReturnsExitCodeZero -Verifiable -ModuleName $Global:ModuleName
+            Mock -CommandName 'Invoke-CommandEx' $Global:CodeThatReturnsExitCodeZero -Verifiable -ModuleName $Global:ModuleName
         }
 
         It 'outputs result if Quiet is disabled' {
             $tempFile = New-TemporaryFile
-            Mock -CommandName 'Invoke-Command' $Global:CodeThatReturnsExitCodeZero -Verifiable -ModuleName $Global:ModuleName
+            Mock -CommandName 'Invoke-CommandEx' $Global:CodeThatReturnsExitCodeZero -Verifiable -ModuleName $Global:ModuleName
 
             Invoke-DockerPush -ImageName 'cool-image' -Quiet:$false 6> $tempFile
 
@@ -107,7 +107,7 @@ Describe 'docker push' {
 
         It 'suppresses output if Quiet is enabled' {
             $tempFile = New-TemporaryFile
-            Mock -CommandName 'Invoke-Command' $Global:CodeThatReturnsExitCodeZero -Verifiable -ModuleName $Global:ModuleName
+            Mock -CommandName 'Invoke-CommandEx' $Global:CodeThatReturnsExitCodeZero -Verifiable -ModuleName $Global:ModuleName
 
             Invoke-DockerPush -ImageName 'cool-image' -Quiet:$true 6> $tempFile
 
